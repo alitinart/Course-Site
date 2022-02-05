@@ -1,0 +1,26 @@
+.section-header {
+  background: #ee9600;
+  background: -webkit-linear-gradient(
+    to right,
+    #ee9600 0%,
+    #f5f5f5 50%,
+    #0021a5 100%
+  );
+  background: -moz-linear-gradient(
+    to right,
+    #ee9600 0%,
+    #f5f5f5 50%,
+    #0021a5 100%
+  );
+  background: linear-gradient(to right, #ee9600 0%, #f5f5f5 50%, #0021a5 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.feedbacks {
+  display: grid;
+  overflow-x: hidden;
+}
+.testimonies {
+  height: 100%;
+  padding: 30px 0;
+}

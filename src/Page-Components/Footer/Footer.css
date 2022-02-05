@@ -1,0 +1,14 @@
+.footer {
+  border-top: 2px gray dashed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  padding: 100px 0;
+}
+.copyright {
+  border-top: dashed 2px gray;
+  border-bottom: dashed 2px gray;
+  padding: 10px 0;
+}

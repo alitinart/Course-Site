@@ -1,0 +1,22 @@
+.Hero {
+  height: calc(100vh);
+}
+.hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 200px 0;
+}
+.hero-image {
+  display: flex;
+  align-items: center;
+}
+@media screen and (max-width: 763px) {
+  .Hero {
+    height: 100%;
+  }
+  .hero-text {
+    display: block;
+  }
+}

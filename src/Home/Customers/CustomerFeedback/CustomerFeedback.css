@@ -1,0 +1,28 @@
+.feedback {
+  background-color: #2e2b2e;
+  padding: 20px;
+  border-radius: 15px;
+  width: 75%;
+  margin: 10px auto;
+  display: inline;
+}
+.socialImage {
+  display: inline;
+}
+.social {
+  display: inline;
+}
+.avatar {
+  border-radius: 100%;
+  width: 80px;
+}
+.info {
+  margin-left: 10px;
+}
+.customer-info {
+  display: flex;
+  align-items: center;
+}
+.Customers {
+  overflow-x: unset;
+}

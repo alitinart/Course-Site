@@ -1,0 +1,14 @@
+.About-Me {
+  margin-top: 200px;
+}
+.socials-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 30px;
+}
+.about-me-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

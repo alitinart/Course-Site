@@ -1,0 +1,30 @@
+.course-card {
+  transition: 0.2s ease-out;
+  cursor: pointer;
+  display: block;
+  text-align: center;
+  background-color: #302c30;
+  margin: 10px auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 80%;
+}
+.course-card:hover {
+  transform: scale(1.1);
+}
+.submit-button {
+  background-color: #333e7b;
+  display: block;
+  padding: 10px;
+  width: 60%;
+  border-radius: 5px;
+  margin: 10px auto;
+}
+.course-title {
+  font-size: 40px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+.course-desc {
+  margin-bottom: 10px 0;
+}

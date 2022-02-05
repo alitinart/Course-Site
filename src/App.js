@@ -1,23 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
+import AddContent from "./AddContent/AddContent";
+import "./App.css";
+import Auth from "./Auth/Auth";
+import Home from "./Home/Home";
+import Footer from "./Page-Components/Footer/Footer";
+import Header from "./Page-Components/Header/Header";
 
 function App() {
+  let user = JSON.parse(localStorage.getItem("currentUser"));
+
+  if (user && window.location.pathname.includes("/auth")) {
+    window.location.href = "/";
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <Header></Header>
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/addContent/:type" element={<AddContent />}></Route>
+          <Route path="/auth/:type" element={<Auth />}></Route>
+          <Route path="*" element={<Home />}></Route>
+        </Routes>
+        <Footer />
+      </BrowserRouter>
     </div>
   );
 }

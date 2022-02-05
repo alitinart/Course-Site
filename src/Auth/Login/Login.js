@@ -45,6 +45,7 @@ export default class Login extends Component {
             defaultValue={this.username}
             onChange={this.usernameChange.bind(this)}
             placeholder="Username"
+            required
           />
           <input
             className="form-control"
@@ -52,6 +53,7 @@ export default class Login extends Component {
             defaultValue={this.username}
             onChange={this.passwordChange.bind(this)}
             placeholder="Password"
+            required
           />
           <p className="mb-2 text-center">
             Don't have a account ?{" "}

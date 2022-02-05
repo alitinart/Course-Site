@@ -58,6 +58,7 @@ export default class SignUp extends Component {
             defaultValue={this.username}
             onChange={this.usernameChange.bind(this)}
             placeholder="Username"
+            required
           />
           <input
             className="form-control"
@@ -65,6 +66,7 @@ export default class SignUp extends Component {
             defaultValue={this.password}
             onChange={this.passwordChange.bind(this)}
             placeholder="Password"
+            required
           />
           <input
             className="form-control"
@@ -72,6 +74,7 @@ export default class SignUp extends Component {
             defaultValue={this.retypedPassword}
             onChange={this.retypeChange.bind(this)}
             placeholder="Retype Password"
+            required
           />
           <p className="mb-2 text-center">
             Don't have a account ?{" "}

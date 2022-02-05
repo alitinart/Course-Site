@@ -28,3 +28,11 @@
 .course-desc {
   margin-bottom: 10px 0;
 }
+.course-tags > p {
+  display: inline-block;
+  border-radius: 5px;
+  font-weight: bold;
+  margin: 5px 10px;
+  background-color: #201d20;
+  padding: 5px;
+}

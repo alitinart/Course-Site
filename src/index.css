@@ -93,6 +93,32 @@ section {
   background-color: #535770;
   transform: scale(1.05);
 }
+.react-tag-input {
+  background: #373a4b !important;
+  color: #333;
+  border: 1px solid #373a4b !important;
+}
+.react-tag-input__input {
+  background: #373a4b !important;
+  color: white !important;
+}
+.react-tag-input__input::placeholder,
+.react-tag-input__input:-moz-placeholder,
+.react-tag-input__input:-ms-input-placeholder,
+.react-tag-input__input::-moz-placeholder,
+.react-tag-input__input::-webkit-input-placeholder {
+  color: #333; /* Input placeholder */
+}
+.react-tag-input__tag {
+  background: #252733 !important;
+}
+.react-tag-input__tag__remove {
+  background: #0c0d11 !important;
+}
+.react-tag-input__tag__remove:before,
+.react-tag-input__tag__remove:after {
+  background: rgb(87, 86, 86); /* X icon in remove button */
+}
 .submit-button-form {
   display: block;
   width: 100%;
@@ -108,4 +134,61 @@ section {
 }
 .scale-up:hover {
   transform: scale(1.2);
+}
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  background-color: #373a4b;
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  transition: 0.5s;
+  font-size: 21px;
+  display: block;
+  width: 25em;
+  margin: 10px 0;
+  text-align: center;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  border: 16px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 16px solid #ffffff;
+  width: 120px;
+  height: 120px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+  margin: 50px auto;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.filter {
+  display: block;
+  margin: 0 auto;
 }

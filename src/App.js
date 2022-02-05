@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import AddContent from "./AddContent/AddContent";
 import "./App.css";
 import Auth from "./Auth/Auth";
+import CoursesPage from "./CoursesPage/CoursesPage";
 import Home from "./Home/Home";
 import Footer from "./Page-Components/Footer/Footer";
 import Header from "./Page-Components/Header/Header";
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/addContent/:type" element={<AddContent />}></Route>
+          <Route path="/courses" element={<CoursesPage />}></Route>
           <Route path="/auth/:type" element={<Auth />}></Route>
           <Route path="*" element={<Home />}></Route>
         </Routes>

@@ -32,8 +32,10 @@ app.post("/course", (req, res) => {
   let newCourse = new Course({
     title: req.body.data.title,
     desc: req.body.data.desc,
-    videos: req.body.data.videos,
+    videos: [],
     price: req.body.data.price,
+    tags: [...req.body.data.tags],
+    image: req.body.data.image,
   });
 
   newCourse.save().then((courseDoc) => {
@@ -76,6 +78,7 @@ app.post("/course/:id", (req, res) => {
     title: req.body.data.title,
     desc: req.body.data.desc,
     link: req.body.data.link,
+    courseId: req.params.id,
     price: req.body.data.price,
   });
 

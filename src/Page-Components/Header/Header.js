@@ -69,7 +69,7 @@ export default class Header extends Component {
                 </Link>
 
                 <Link
-                  to={"/"}
+                  to={"/courses"}
                   className="text-base font-medium text-white scale-up"
                 >
                   Courses
@@ -158,7 +158,7 @@ export default class Header extends Component {
                     </Link>
 
                     <Link
-                      to={"/"}
+                      to={"/courses"}
                       className="text-base font-medium text-white scale-up"
                     >
                       Courses

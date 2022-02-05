@@ -1,0 +1,39 @@
+.course-info {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.product-info {
+  margin-left: 20px;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: center;
+  width: 60%;
+}
+.product-title {
+  color: #b6bffd;
+  font-weight: bolder;
+  margin-top: 50px;
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+.product-desc {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+.product-button {
+  display: inline-block;
+  margin-bottom: 20px;
+}
+.product-price {
+  display: inline-block;
+  color: #b6bffd;
+  font-weight: bold;
+  font-size: 25px;
+}
+.grid-item {
+  margin: 0 auto;
+}

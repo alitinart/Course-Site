@@ -56,6 +56,7 @@ export default class CoursesPage extends Component {
                       image={course.image}
                       title={course.title}
                       description={course.desc}
+                      id={course._id}
                       tags={[...course.tags]}
                       key={course._id}
                     ></CourseCard>
@@ -69,6 +70,7 @@ export default class CoursesPage extends Component {
                         description={course.desc}
                         tags={[...course.tags]}
                         key={course._id}
+                        id={course._id}
                       ></CourseCard>
                     );
                   }
@@ -81,6 +83,7 @@ export default class CoursesPage extends Component {
                         title={course.title}
                         description={course.desc}
                         tags={[...course.tags]}
+                        id={course._id}
                         key={course._id}
                       ></CourseCard>
                     );
@@ -95,6 +98,7 @@ export default class CoursesPage extends Component {
                         description={course.desc}
                         tags={[...course.tags]}
                         key={course._id}
+                        id={course._id}
                       ></CourseCard>
                     );
                   }
@@ -107,6 +111,7 @@ export default class CoursesPage extends Component {
                       description={course.desc}
                       tags={[...course.tags]}
                       key={course._id}
+                      id={course._id}
                     ></CourseCard>
                   );
                   break;

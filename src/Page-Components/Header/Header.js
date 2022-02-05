@@ -75,19 +75,12 @@ export default class Header extends Component {
                   Courses
                 </Link>
 
-                <Link
-                  to={"/"}
-                  className="text-base font-medium text-white scale-up"
-                >
-                  Your Courses
-                </Link>
-
-                {this.state.admin ? (
+                {this.state.user ? (
                   <Link
-                    to={"/"}
+                    to={"/account"}
                     className="text-base font-medium text-white scale-up"
                   >
-                    Your Courses
+                    Your Account
                   </Link>
                 ) : (
                   <></>
@@ -164,12 +157,16 @@ export default class Header extends Component {
                       Courses
                     </Link>
 
-                    <Link
-                      to={"/"}
-                      className="scale-up text-base font-medium text-white"
-                    >
-                      Your Courses
-                    </Link>
+                    {this.state.user ? (
+                      <Link
+                        to={"/account"}
+                        className="scale-up text-base font-medium text-white"
+                      >
+                        Your Account
+                      </Link>
+                    ) : (
+                      <></>
+                    )}
                   </div>
                   <div>
                     {this.state.user ? (

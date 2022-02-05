@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import CourseCard from "./CourseCard/CourseCard";
-import Angular from "../../Assets/Images/Angular.png";
-import ReactImage from "../../Assets/Images/React.png";
-import Vue from "../../Assets/Images/Vue.png";
 import axios from "axios";
 
 export default class Courses extends Component {

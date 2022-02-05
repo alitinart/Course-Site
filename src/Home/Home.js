@@ -1,6 +1,6 @@
 import React from "react";
 import AboutMe from "./About-Me/AboutMe";
-import Courses from "./Courses/Courses";
+import Courses from "../Courses/Courses";
 import Customers from "./Customers/Customers";
 import Hero from "./Hero/Hero";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import CourseInfoCard from "./CourseCard/CourseInfoCard";
+import CourseInfoCard from "./CourseInfoCard/CourseInfoCard";
 
 export default function CourseInfo() {
   window.scrollTo(0, 0);

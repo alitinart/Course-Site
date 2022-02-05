@@ -84,8 +84,8 @@ section {
   transition: 0.5s;
   font-size: 21px;
   display: block;
-  width: 25em;
-  margin: 10px 0;
+  width: 90%;
+  margin: 10px auto;
   text-align: center;
 }
 .form-control:focus {
@@ -121,7 +121,8 @@ section {
 }
 .submit-button-form {
   display: block;
-  width: 100%;
+  width: 90%;
+  margin: 0 auto;
 }
 .btn-logout {
   background-color: rgb(255, 49, 49);
@@ -187,8 +188,4 @@ input[type="file"] {
   100% {
     transform: rotate(360deg);
   }
-}
-.filter {
-  display: block;
-  margin: 0 auto;
 }

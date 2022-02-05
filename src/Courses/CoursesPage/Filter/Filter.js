@@ -13,7 +13,7 @@ export default function Filter(props) {
     <select
       onChange={onChangeHandler}
       defaultValue={"All"}
-      className="form-control filter"
+      className="form-control grid-item"
     >
       <option value={"All"}>All</option>
       <option value={"Project Based"}>Project Based</option>

@@ -116,7 +116,7 @@ export default class AddCourses extends Component {
             placeholder="Tags"
             onChange={(newTags) => this.setState({ tags: newTags })}
           />
-          <button type="submit" className="mt-2 btn submit-button-form">
+          <button type="submit" className="btn submit-button-form mt-5">
             Submit
           </button>
         </form>

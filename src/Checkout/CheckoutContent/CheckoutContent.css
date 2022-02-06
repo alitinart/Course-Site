@@ -1,0 +1,12 @@
+.checkout-product {
+  background-color: #302c30;
+  border-radius: 15px;
+  padding: 20px;
+}
+.product-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 90%;
+  margin: 0 auto;
+}

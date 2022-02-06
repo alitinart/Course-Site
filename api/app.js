@@ -1,12 +1,21 @@
 const express = require("express");
 const app = express();
 
+require("dotenv").config();
+
 const mongoose = require("mongoose");
 const db = require("./db/db");
 
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
+const stripe = require("stripe")(
+  "sk_test_51JE9SYC2iQe3nGmGILbK481s4WeAq3RsAUy33lir3iL5pqemhVrJHXK1lIpcTx1hL5W7O7eWdIZlS1TmUlwQ6bE300ziA0e5CO"
+);
 const Video = mongoose.model("Video");
 const Course = mongoose.model("Course");
 const User = mongoose.model("User");
+const RefreshTokenModel = mongoose.model("refreshToken");
 
 app.use(express.json());
 
@@ -14,7 +23,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
   res.header(
     "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
+    "Origin, X-Requested-With, Content-Type, Accept, authorization"
   );
   res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, PATCH");
   next();
@@ -117,34 +126,133 @@ app.patch("/course/:id", (req, res) => {
  *
  */
 
-app.post("/users", (req, res) => {
-  let newUser = new User({
-    userName: req.body.data.username,
-    password: req.body.data.password,
-  });
+// Sign Up
 
-  newUser.save().then((userDoc) => {
-    res.send(userDoc);
+app.post("/users", async (req, res) => {
+  User.find({ userName: req.body.data.username }).then(async (users) => {
+    if (users.length <= 0) {
+      try {
+        const salt = await bcrypt.genSalt();
+        const hashedPassword = await bcrypt.hash(req.body.data.password, salt);
+        let newUser = new User({
+          userName: req.body.data.username,
+          password: hashedPassword,
+        });
+
+        newUser.save().then((userDoc) => {
+          res.send(userDoc);
+        });
+      } catch {
+        res.status(500).send();
+      }
+    } else {
+      res.send("User with that username already exists");
+    }
   });
 });
+
+// Login
+
+app.post("/users/login", async (req, res) => {
+  User.find({ userName: req.body.data.username }).then(async (user) => {
+    if (user.length <= 0) {
+      res.send("No user with that username");
+    }
+    try {
+      if (await bcrypt.compare(req.body.data.password, user[0].password)) {
+        const newUser = { ...user[0] };
+        const accessToken = generateAccessToken(newUser);
+        const refreshToken = jwt.sign(
+          newUser,
+          process.env.REFRESH_TOKEN_SECRET
+        );
+        const newRefreshToken = new RefreshTokenModel({
+          token: refreshToken,
+        });
+        newRefreshToken.save();
+        res.json({ accessToken: accessToken, refreshToken: refreshToken });
+      } else {
+        res.send();
+      }
+    } catch (err) {
+      console.log(err);
+      res.status(500).send();
+    }
+  });
+});
+
+// Auth Token
+
+function authenticateToken(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  if (token === null) {
+    res.send("No Token");
+  }
+
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+    if (err) {
+      res.send("Forbbiden");
+    }
+    req.user = user;
+    next();
+  });
+}
+
+app.get("/auth/token", authenticateToken, (req, res) => {
+  res.send("Allowed");
+});
+
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "10m",
+  });
+}
+
+// Create Token
+
+app.post("/token", (req, res) => {
+  const refreshToken = req.body.data.token;
+  if (refreshToken === null) {
+    res.sendStatus(401);
+  }
+  RefreshTokenModel.find({ token: refreshToken }).then((tokens) => {
+    if (tokens.length <= 0) {
+      res.sendStatus(403);
+    }
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+      if (err) return console.log(err);
+      const accessToken = generateAccessToken({
+        name: user.username,
+        password: user.password,
+        _id: user._id,
+      });
+      res.json({ accessToken: accessToken });
+    });
+  });
+});
+
+app.get("/users/admin/", authenticateToken, (req, res) => {
+  if ("61ffb1f9feaded4b5cc3502a" === req.user._doc._id) {
+    res.send("True");
+  } else {
+    res.send("You are not a admin");
+  }
+});
+
+// Return all users
 
 app.get("/users", (req, res) => {
   User.find({}).then((users) => res.send(users));
 });
 
-app.get("/users/id/:id", (req, res) => {
+app.get("/users/:id", (req, res) => {
   User.find({ _id: req.params.id }).then((user) => {
     res.send(user);
   });
 });
 
-app.get("/users/:username", (req, res) => {
-  User.find({ username: req.params.username }).then((user) => {
-    res.send(user);
-  });
-});
-
-app.patch("/course/:id", (req, res) => {
+app.patch("/users/:id", (req, res) => {
   User.findByIdAndUpdate({ _id: req.params.id }, { $set: req.body }).then(
     (user) => res.send(user)
   );
@@ -156,12 +264,16 @@ app.delete("/users/:id", (req, res) => {
   });
 });
 
-app.get("/users/admin/:id", (req, res) => {
-  if (req.params.id === "61fceb471e18a915c0ede979") {
-    res.send("True");
-  } else {
-    res.send("You are not a admin");
-  }
+/**
+ *
+ * Stripe Key
+ *
+ */
+
+app.get("/key", (req, res) => {
+  res.send(
+    "pk_test_51JE9SYC2iQe3nGmGaErsDUIhNvHnTN7li1huLVyywU5ZMRX5p8ImIv8mJLhoC9HEVlDkU7FxJmRW9F3kx32Buxs100RdqkzIkQ"
+  );
 });
 
 app.listen(8000, () => {

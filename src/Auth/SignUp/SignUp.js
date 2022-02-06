@@ -19,32 +19,25 @@ export default class SignUp extends Component {
 
   signUpHandler(event) {
     event.preventDefault();
-    axios.get(`http://localhost:8000/users/${this.username}`).then((user) => {
-      let isUser = user.data.filter((userData) => {
-        if (userData.userName === this.username) {
-          return userData;
-        }
-      });
-      if (isUser.length <= 0) {
-        if (this.retypedPassword === this.password) {
-          axios
-            .post("http://localhost:8000/users", {
-              data: {
-                username: this.username,
-                password: this.password,
-              },
-            })
-            .then((resData) => {
-              localStorage.setItem("currentUser", JSON.stringify(resData.data));
-              window.location.href = "/";
-            });
-        } else {
-          alert("Password's don't match");
-        }
-      } else {
-        alert("A user with that username already exists");
-      }
-    });
+
+    if (this.retypedPassword === this.password) {
+      axios
+        .post("http://localhost:8000/users", {
+          data: {
+            username: this.username,
+            password: this.password,
+          },
+        })
+        .then((resData) => {
+          if (resData.data === "User with that username already exists") {
+            alert("User with that username already exists");
+          } else {
+            window.location.href = "/auth/login";
+          }
+        });
+    } else {
+      alert("Password's don't match");
+    }
   }
 
   render() {

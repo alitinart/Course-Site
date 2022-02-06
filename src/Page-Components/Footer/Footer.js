@@ -4,12 +4,16 @@ import { Link } from "react-router-dom";
 import "./Footer.css";
 
 function Footer() {
-  let user = JSON.parse(localStorage.getItem("currentUser"));
+  let user = localStorage.getItem("currentUser");
   const [admin, setAdmin] = useState(false);
 
   if (user) {
     axios
-      .get(`http://localhost:8000/users/admin/${user._id}`)
+      .get(`http://localhost:8000/users/admin/`, {
+        headers: {
+          authorization: `Bearer ${user}`,
+        },
+      })
       .then((resData) => {
         if (resData.data === "True") {
           setAdmin(true);
@@ -32,7 +36,7 @@ function Footer() {
       <p className="mt-2">Home Courses Your Courses</p>
       {admin ? (
         <Link to={"/addContent/addCourses"}>
-          <button className="btn">Add Course</button>
+          <button className="btn mt-5">Add Course</button>
         </Link>
       ) : (
         <></>

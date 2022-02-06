@@ -16,3 +16,4 @@ mongoose.connect(
 require("./models/course.model");
 require("./models/video.model");
 require("./models/user.model");
+require("./models/token.model");

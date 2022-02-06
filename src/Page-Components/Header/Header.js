@@ -4,7 +4,6 @@ import { Popover, Transition } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Logo from "../../Assets/Images/Logo@2x.png";
 import { Link } from "react-router-dom";
-import axios from "axios";
 
 export default class Header extends Component {
   constructor(props) {
@@ -20,7 +19,7 @@ export default class Header extends Component {
     if (localStorage.getItem("currentUser")) {
       if (!this.state.user) {
         this.setState({
-          user: { ...JSON.parse(localStorage.getItem("currentUser")) },
+          user: { ...localStorage.getItem("currentUser") },
         });
       }
     }

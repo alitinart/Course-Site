@@ -15,23 +15,21 @@ export default class Login extends Component {
 
   loginHandler(event) {
     event.preventDefault();
-    axios.get(`http://localhost:8000/users/${this.username}`).then((user) => {
-      let getUser = user.data.filter((userData) => {
-        if (userData.userName === this.username) {
-          return userData;
-        }
-      });
-      if (getUser.length > 0) {
-        if (getUser[0].password === this.password) {
-          localStorage.setItem("currentUser", JSON.stringify(getUser[0]));
+    axios
+      .post(`http://localhost:8000/users/login`, {
+        data: {
+          username: this.username,
+          password: this.password,
+        },
+      })
+      .then((resData) => {
+        if (resData.data) {
+          localStorage.setItem("currentUser", resData.data.accessToken);
           window.location.href = "/";
         } else {
-          alert("Password's don't match");
+          alert("The typed credentials are wrong");
         }
-      } else {
-        alert("No user found with that username");
-      }
-    });
+      });
   }
 
   render() {

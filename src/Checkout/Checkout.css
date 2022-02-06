@@ -1,6 +1,10 @@
-.no-courses {
+.checkout {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
+}
+.product {
+  background-color: #302c30;
+  width: 80%;
 }

@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import StripeCheckout from "react-stripe-checkout";
+import logo from "../../Assets/Images/Logo.png";
 
 import "./CheckoutContent.css";
 
@@ -9,13 +10,17 @@ export default class CheckoutContent extends Component {
     super(props);
     this.state = {
       checkoutProduct: {},
+      stripeKey: null,
     };
   }
 
   componentDidMount() {
     this.requestHandler().then((resData) => {
-      this.setState({
-        checkoutProduct: resData.data[0],
+      this.stripeKey().then((key) => {
+        this.setState({
+          checkoutProduct: resData.data[0],
+          stripeKey: key.data,
+        });
       });
     });
   }
@@ -27,6 +32,39 @@ export default class CheckoutContent extends Component {
 
     return res;
   }
+
+  async stripeKey() {
+    const res = await axios.get("http://localhost:8000/key");
+
+    return res;
+  }
+
+  makePayment = (token) => {
+    const body = {
+      token: token,
+      product: {
+        name: this.state.checkoutProduct.title,
+        price: this.state.checkoutProduct.price,
+        productBy: "Nart Aliti",
+        productId: this.state.checkoutProduct._id,
+      },
+    };
+
+    const headers = {
+      "Content-Type": "application/json",
+      authorization: `Bearer ${localStorage.getItem("currentUser")}`,
+    };
+
+    return fetch("http://localhost:8000/payment", {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(body),
+    })
+      .then((res) => {
+        localStorage.setItem("currentUser", res.data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   render() {
     return this.state.checkoutProduct ? (
@@ -49,9 +87,22 @@ export default class CheckoutContent extends Component {
               Price: {this.state.checkoutProduct.price}$
             </h1>
           </div>
-          <Link to={"./payment"}>
-            <button className="btn mt-10 w-full float-right">Continue</button>
-          </Link>
+          {this.state.checkoutProduct && this.state.stripeKey ? (
+            <StripeCheckout
+              stripeKey={this.state.stripeKey}
+              token={this.makePayment}
+              image={logo}
+              name={this.state.checkoutProduct.title}
+              price={this.state.checkoutProduct.price * 100}
+              description={this.state.checkoutProduct.desc}
+              panelLabel={`Buy for ${this.state.checkoutProduct.price}$`}
+              billingAddress
+            >
+              <button className="btn w-full">Pay</button>
+            </StripeCheckout>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     ) : (

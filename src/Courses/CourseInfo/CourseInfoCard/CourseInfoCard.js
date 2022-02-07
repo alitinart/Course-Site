@@ -10,26 +10,35 @@ export default class CourseInfoCard extends Component {
     this.state = {
       courseInfo: {},
       user: null,
+      userObject: null,
       admin: false,
     };
   }
 
   componentDidMount() {
     this.requestHandler().then((course) => {
-      let currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      let currentUser = localStorage.getItem("currentUser");
       this.setState({
         courseInfo: { ...course.data[0] },
         user: currentUser,
       });
-      this.adminHandler(currentUser._id).then((resData) => {
-        if (resData.data === "True") {
-          this.setState((prevState) => {
-            return {
-              ...prevState,
-              admin: true,
-            };
-          });
-        }
+      this.adminHandler(currentUser).then((resData) => {
+        this.userHandler().then((user) => {
+          console.log(user);
+          if (resData.data === "True") {
+            this.setState((prevState) => {
+              return {
+                ...prevState,
+                admin: true,
+                userObject: user.data,
+              };
+            });
+          } else {
+            this.setState((prevState) => {
+              return { ...prevState, userObject: user.data };
+            });
+          }
+        });
       });
     });
   }
@@ -42,8 +51,22 @@ export default class CourseInfoCard extends Component {
     return res;
   }
 
-  async adminHandler(userId) {
-    const res = await axios.get(`http://localhost:8000/users/admin/${userId}`);
+  async userHandler() {
+    const res = await axios.get(`http://localhost:8000/user/`, {
+      headers: {
+        authorization: `Bearer ${this.state.user}`,
+      },
+    });
+
+    return res;
+  }
+
+  async adminHandler(user) {
+    const res = await axios.get(`http://localhost:8000/users/admin/`, {
+      headers: {
+        authorization: `Bearer ${user}`,
+      },
+    });
 
     return res;
   }
@@ -63,9 +86,16 @@ export default class CourseInfoCard extends Component {
           <div className="grid-item product-info">
             <h1 className="product-title">{this.state.courseInfo.title}</h1>
             <p className="product-desc">{this.state.courseInfo.desc}</p>
-            <Link to={"/checkout/" + this.state.courseInfo._id}>
-              <button className="btn product-button">Buy Now</button>
-            </Link>
+            {this.state.userObject &&
+            this.state.userObject.courses.includes(
+              this.state.courseInfo.title
+            ) ? (
+              <button>s</button>
+            ) : (
+              <Link to={"/checkout/" + this.state.courseInfo._id}>
+                <button className="btn product-button">Buy Now</button>
+              </Link>
+            )}
             <p className="product-price">
               Price: {this.state.courseInfo.price}$
             </p>

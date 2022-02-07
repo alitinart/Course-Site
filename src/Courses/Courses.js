@@ -89,7 +89,7 @@ export default class Courses extends Component {
                       title={course.title}
                       description={course.desc}
                       tags={[...course.tags]}
-                      key={course._id}
+                      key={course._id + " Project"}
                       id={course._id}
                     ></CourseCard>
                   );
@@ -121,7 +121,7 @@ export default class Courses extends Component {
                       title={course.title}
                       description={course.desc}
                       tags={[...course.tags]}
-                      key={course._id}
+                      key={course._id + " Modern"}
                       id={course._id}
                     ></CourseCard>
                   );
@@ -156,7 +156,7 @@ export default class Courses extends Component {
                       title={course.title}
                       description={course.desc}
                       tags={[...course.tags]}
-                      key={course._id}
+                      key={course._id + " Beginner"}
                       id={course._id}
                     ></CourseCard>
                   );

@@ -12,6 +12,8 @@ const bcrypt = require("bcrypt");
 const stripe = require("stripe")(
   "sk_test_51JE9SYC2iQe3nGmGILbK481s4WeAq3RsAUy33lir3iL5pqemhVrJHXK1lIpcTx1hL5W7O7eWdIZlS1TmUlwQ6bE300ziA0e5CO"
 );
+const uuid = require("uuid").v4;
+
 const Video = mongoose.model("Video");
 const Course = mongoose.model("Course");
 const User = mongoose.model("User");
@@ -27,6 +29,52 @@ app.use(function (req, res, next) {
   );
   res.header("Access-Control-Allow-Methods", "POST, GET, DELETE, PUT, PATCH");
   next();
+});
+
+/**
+ *
+ * Stripe Requests
+ *
+ * Methods: POST, GET
+ *
+ */
+
+app.post("/payment", authenticateToken, (req, res) => {
+  const { product, token } = req.body;
+  const idempotencyKey = uuid();
+
+  return stripe.customers
+    .create({
+      email: token.email,
+      source: token.id,
+    })
+    .then((customer) => {
+      stripe.charges.create(
+        {
+          amount: product.price * 100,
+          currency: "usd",
+          customer: customer.id,
+          receipt_email: token.email,
+          description: `Purchase of ${product.name}`,
+        },
+        { idempotencyKey }
+      );
+    })
+    .then((result) => {
+      Course.findOne({ _id: product.productId }).then((course) => {
+        let newCourses = req.user._doc.courses;
+        newCourses.unshift(course.title);
+        User.findOneAndUpdate(
+          { _id: req.user._doc._id },
+          { $set: { courses: [...newCourses] } }
+        ).then((userDoc) => {
+          const newAccessToken = generateAccessToken(JSON.stringify(userDoc));
+
+          res.send(newAccessToken);
+        });
+      });
+    })
+    .catch((err) => console.log(err));
 });
 
 /**
@@ -161,7 +209,7 @@ app.post("/users/login", async (req, res) => {
     try {
       if (await bcrypt.compare(req.body.data.password, user[0].password)) {
         const newUser = { ...user[0] };
-        const accessToken = generateAccessToken(newUser);
+        const accessToken = generateAccessToken(JSON.stringify(newUser));
         const refreshToken = jwt.sign(
           newUser,
           process.env.REFRESH_TOKEN_SECRET
@@ -187,12 +235,12 @@ function authenticateToken(req, res, next) {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
   if (token === null) {
-    res.send("No Token");
+    return res.send("No Token");
   }
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
     if (err) {
-      res.send("Forbbiden");
+      return res.send("Forbbiden");
     }
     req.user = user;
     next();
@@ -204,8 +252,8 @@ app.get("/auth/token", authenticateToken, (req, res) => {
 });
 
 function generateAccessToken(user) {
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "10m",
+  return jwt.sign(JSON.parse(user), process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1d",
   });
 }
 
@@ -223,7 +271,7 @@ app.post("/token", (req, res) => {
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
       if (err) return console.log(err);
       const accessToken = generateAccessToken({
-        name: user.username,
+        userName: user.username,
         password: user.password,
         _id: user._id,
       });
@@ -244,6 +292,10 @@ app.get("/users/admin/", authenticateToken, (req, res) => {
 
 app.get("/users", (req, res) => {
   User.find({}).then((users) => res.send(users));
+});
+
+app.get("/user", authenticateToken, (req, res) => {
+  res.send(req.user._doc);
 });
 
 app.get("/users/:id", (req, res) => {
@@ -274,6 +326,10 @@ app.get("/key", (req, res) => {
   res.send(
     "pk_test_51JE9SYC2iQe3nGmGaErsDUIhNvHnTN7li1huLVyywU5ZMRX5p8ImIv8mJLhoC9HEVlDkU7FxJmRW9F3kx32Buxs100RdqkzIkQ"
   );
+});
+
+app.get("/token", (req, res) => {
+  res.send(process.env.STRIPE_TOKEN);
 });
 
 app.listen(8000, () => {

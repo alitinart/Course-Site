@@ -23,11 +23,15 @@ export default class Login extends Component {
         },
       })
       .then((resData) => {
-        if (resData.data) {
-          localStorage.setItem("currentUser", resData.data.accessToken);
-          window.location.href = "/";
+        if (resData.data === "No User Found") {
+          alert("No User found with that Username");
         } else {
-          alert("The typed credentials are wrong");
+          if (resData.data) {
+            localStorage.setItem("currentUser", resData.data.accessToken);
+            window.location.href = "/";
+          } else {
+            alert("The typed credentials are wrong");
+          }
         }
       });
   }

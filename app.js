@@ -412,6 +412,6 @@ app.get("/token", (req, res) => {
   res.send(process.env.STRIPE_TOKEN);
 });
 
-app.listen(8000, () => {
-  console.log("App listening on port 8000");
+app.listen(process.env.PORT || 3000, () => {
+  console.log("App listening on port 3000");
 });

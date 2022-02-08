@@ -33,6 +33,9 @@ export default class Login extends Component {
             alert("The typed credentials are wrong");
           }
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 

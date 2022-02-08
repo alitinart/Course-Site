@@ -16,20 +16,28 @@ export default class Account extends Component {
   }
 
   componentDidMount() {
-    this.requestHandler().then((userObject) => {
-      this.getCourses().then((courses) => {
-        let findCourses = courses.data.filter((course) => {
-          if (userObject.data.courses.includes(course.title)) {
-            return course;
-          }
-        });
-        console.log(userObject.data);
-        this.setState({
-          user: userObject.data,
-          courses: findCourses,
-        });
+    this.requestHandler()
+      .then((userObject) => {
+        this.getCourses()
+          .then((courses) => {
+            let findCourses = courses.data.filter((course) => {
+              if (userObject.data.courses.includes(course.title)) {
+                return course;
+              }
+            });
+            console.log(userObject.data);
+            this.setState({
+              user: userObject.data,
+              courses: findCourses,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   }
 
   async requestHandler() {

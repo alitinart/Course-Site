@@ -65,6 +65,9 @@ export default class AddCourses extends Component {
       })
       .then((resData) => {
         window.location.href = "/";
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 

@@ -19,11 +19,15 @@ export default class CoursesPage extends Component {
   }
 
   componentDidMount() {
-    this.requestHandler().then((courses) => {
-      this.setState({
-        courses: [...courses.data],
+    this.requestHandler()
+      .then((courses) => {
+        this.setState({
+          courses: [...courses.data],
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   }
 
   async requestHandler() {

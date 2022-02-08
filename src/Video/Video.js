@@ -8,10 +8,15 @@ export default function Video() {
   const { id, videoIndex } = useParams();
 
   useEffect(async () => {
-    await axios.get(`http://localhost:8000/course/${id}`).then((course) => {
-      setVideo({ ...course.data.videos[videoIndex] });
-      setCourse({ ...course.data });
-    });
+    await axios
+      .get(`http://localhost:8000/course/${id}`)
+      .then((course) => {
+        setVideo({ ...course.data.videos[videoIndex] });
+        setCourse({ ...course.data });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     return () => {};
   }, []);
 

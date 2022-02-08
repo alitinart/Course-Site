@@ -16,30 +16,42 @@ export default class CourseInfoCard extends Component {
   }
 
   componentDidMount() {
-    this.requestHandler().then((course) => {
-      let currentUser = localStorage.getItem("currentUser");
-      this.setState({
-        courseInfo: { ...course.data },
-        user: currentUser,
-      });
-      this.adminHandler(currentUser).then((resData) => {
-        this.userHandler().then((user) => {
-          if (resData.data === "True") {
-            this.setState((prevState) => {
-              return {
-                ...prevState,
-                admin: true,
-                userObject: user.data,
-              };
-            });
-          } else {
-            this.setState((prevState) => {
-              return { ...prevState, userObject: user.data };
-            });
-          }
+    this.requestHandler()
+      .then((course) => {
+        let currentUser = localStorage.getItem("currentUser");
+        this.setState({
+          courseInfo: { ...course.data },
+          user: currentUser,
         });
+        this.adminHandler(currentUser)
+          .then((resData) => {
+            this.userHandler()
+              .then((user) => {
+                if (resData.data === "True") {
+                  this.setState((prevState) => {
+                    return {
+                      ...prevState,
+                      admin: true,
+                      userObject: user.data,
+                    };
+                  });
+                } else {
+                  this.setState((prevState) => {
+                    return { ...prevState, userObject: user.data };
+                  });
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   }
 
   async requestHandler() {

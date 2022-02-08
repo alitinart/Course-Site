@@ -12,11 +12,15 @@ export default class CourseVideos extends Component {
   }
 
   componentDidMount() {
-    this.requestHandler().then((course) => {
-      this.setState({
-        course: course.data,
+    this.requestHandler()
+      .then((course) => {
+        this.setState({
+          course: course.data,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   }
 
   async requestHandler() {
@@ -34,27 +38,33 @@ export default class CourseVideos extends Component {
             {this.state.course.title}
           </h1>
         </div>
-        <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
-          {this.state.course.videos.map((video, index) => {
-            return (
-              <div className="video-card">
-                <iframe
-                  src={video.link}
-                  width="100%"
-                  height="360px"
-                  className="rounded-md"
-                  frameBorder="0"
-                  allowFullScreen
-                ></iframe>
-                <h1 className="font-bold text-5xl">{video.title}</h1>
-                <h1 className="mt-3 mb-3">{video.desc}</h1>
-                <Link className="btn" to={"./" + index}>
-                  <button>Watch</button>
-                </Link>
-              </div>
-            );
-          })}
-        </div>
+        {this.state.course.videos.length > 0 ? (
+          <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
+            {this.state.course.videos.map((video, index) => {
+              return (
+                <div className="video-card">
+                  <iframe
+                    src={video.link}
+                    width="100%"
+                    height="360px"
+                    className="rounded-md"
+                    frameBorder="0"
+                    allowFullScreen
+                  ></iframe>
+                  <h1 className="font-bold text-5xl">{video.title}</h1>
+                  <h1 className="mt-3 mb-3">{video.desc}</h1>
+                  <Link className="btn" to={"./" + index}>
+                    <button>Watch</button>
+                  </Link>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <h1 className="font-bold text-3xl text-center mt-10 mb-10">
+            No videos for this current course
+          </h1>
+        )}
       </div>
     ) : (
       <></>

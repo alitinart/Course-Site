@@ -17,11 +17,15 @@ export default class Courses extends Component {
   }
 
   componentDidMount() {
-    this.requestHandler().then((resData) => {
-      this.setState({
-        courses: [...resData.data],
+    this.requestHandler()
+      .then((resData) => {
+        this.setState({
+          courses: [...resData.data],
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   }
 
   async requestHandler() {

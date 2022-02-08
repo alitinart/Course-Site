@@ -34,6 +34,9 @@ export default class SignUp extends Component {
           } else {
             window.location.href = "/auth/login";
           }
+        })
+        .catch((err) => {
+          console.log(err);
         });
     } else {
       alert("Password's don't match");

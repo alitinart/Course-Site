@@ -18,6 +18,9 @@ function Footer() {
         if (resData.data === "True") {
           setAdmin(true);
         }
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 

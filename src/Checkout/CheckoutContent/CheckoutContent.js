@@ -15,14 +15,18 @@ export default class CheckoutContent extends Component {
   }
 
   componentDidMount() {
-    this.requestHandler().then((resData) => {
-      this.stripeKey().then((key) => {
-        this.setState({
-          checkoutProduct: resData.data[0],
-          stripeKey: key.data,
+    this.requestHandler()
+      .then((resData) => {
+        this.stripeKey().then((key) => {
+          this.setState({
+            checkoutProduct: resData.data[0],
+            stripeKey: key.data,
+          });
         });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   }
 
   async requestHandler() {

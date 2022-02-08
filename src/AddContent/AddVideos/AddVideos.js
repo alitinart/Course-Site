@@ -44,6 +44,9 @@ export default class AddVideos extends Component {
       })
       .then((resData) => {
         window.location.href = "/";
+      })
+      .catch((err) => {
+        console.log(err);
       });
   }
 

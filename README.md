@@ -4,11 +4,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://avatars.githubusercontent.com/u/76398544?v=4">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">Nart Aliti</h3>
 
   <p align="center">
     Learn programing easy and fast.

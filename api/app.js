@@ -107,7 +107,7 @@ app.get("/course", (req, res) => {
 });
 
 app.get("/course/:id", (req, res) => {
-  Course.find({ _id: req.params.id }).then((course) => res.send(course));
+  Course.findOne({ _id: req.params.id }).then((course) => res.send(course));
 });
 
 app.delete("/course/:id", (req, res) => {
@@ -131,16 +131,28 @@ app.patch("/course/:id", (req, res) => {
  */
 
 app.post("/course/:id", (req, res) => {
-  let newVideo = new Video({
+  let videoObject = {
     title: req.body.data.title,
     desc: req.body.data.desc,
     link: req.body.data.link,
     courseId: req.params.id,
-    price: req.body.data.price,
+  };
+  let newVideo = new Video({
+    ...videoObject,
   });
 
-  newVideo.save().then((videoDoc) => {
-    res.send(videoDoc);
+  Course.findOne({ _id: req.params.id }).then((course) => {
+    let prevVideos = course.videos;
+    prevVideos.push(videoObject);
+
+    Course.findOneAndUpdate(
+      { _id: req.params.id },
+      { $set: { videos: prevVideos } }
+    ).then(() => {
+      newVideo.save().then((videoDoc) => {
+        res.send(videoDoc);
+      });
+    });
   });
 });
 
@@ -151,7 +163,7 @@ app.get("/video", (req, res) => {
 });
 
 app.get("/video/:id", (req, res) => {
-  Video.find({ _id: req.params.id }).then((video) => res.send(video));
+  Video.findOne({ _id: req.params.id }).then((video) => res.send(video));
 });
 
 app.delete("/course/:id/:videoId", (req, res) => {
@@ -204,27 +216,30 @@ app.post("/users", async (req, res) => {
 app.post("/users/login", async (req, res) => {
   User.find({ userName: req.body.data.username }).then(async (user) => {
     if (user.length <= 0) {
-      res.send("No user with that username");
-    }
-    try {
-      if (await bcrypt.compare(req.body.data.password, user[0].password)) {
-        const newUser = { ...user[0] };
-        const accessToken = generateAccessToken(JSON.stringify(newUser));
-        const refreshToken = jwt.sign(
-          newUser,
-          process.env.REFRESH_TOKEN_SECRET
-        );
-        const newRefreshToken = new RefreshTokenModel({
-          token: refreshToken,
-        });
-        newRefreshToken.save();
-        res.json({ accessToken: accessToken, refreshToken: refreshToken });
-      } else {
-        res.send();
+      res.send("No User Found");
+    } else if (user[0].userName === req.body.data.username) {
+      try {
+        if (await bcrypt.compare(req.body.data.password, user[0].password)) {
+          const newUser = { ...user[0] };
+          const accessToken = generateAccessToken(JSON.stringify(newUser));
+          const refreshToken = jwt.sign(
+            newUser,
+            process.env.REFRESH_TOKEN_SECRET
+          );
+          const newRefreshToken = new RefreshTokenModel({
+            token: refreshToken,
+          });
+          newRefreshToken.save();
+          res.json({ accessToken: accessToken, refreshToken: refreshToken });
+        } else {
+          res.send();
+        }
+      } catch (err) {
+        console.log(err);
+        res.status(500).send();
       }
-    } catch (err) {
-      console.log(err);
-      res.status(500).send();
+    } else {
+      res.send("No User Found");
     }
   });
 });
@@ -249,6 +264,10 @@ function authenticateToken(req, res, next) {
 
 app.get("/auth/token", authenticateToken, (req, res) => {
   res.send("Allowed");
+});
+
+app.get("/user/find", authenticateToken, (req, res) => {
+  res.send(req.user._doc);
 });
 
 function generateAccessToken(user) {
@@ -283,7 +302,6 @@ app.post("/token", (req, res) => {
 app.get("/users/admin/", authenticateToken, (req, res) => {
   if ("61ffb1f9feaded4b5cc3502a" === req.user._doc._id) {
     res.send("True");
-  } else {
     res.send("You are not a admin");
   }
 });

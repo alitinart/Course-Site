@@ -19,12 +19,11 @@ export default class CourseInfoCard extends Component {
     this.requestHandler().then((course) => {
       let currentUser = localStorage.getItem("currentUser");
       this.setState({
-        courseInfo: { ...course.data[0] },
+        courseInfo: { ...course.data },
         user: currentUser,
       });
       this.adminHandler(currentUser).then((resData) => {
         this.userHandler().then((user) => {
-          console.log(user);
           if (resData.data === "True") {
             this.setState((prevState) => {
               return {
@@ -90,7 +89,12 @@ export default class CourseInfoCard extends Component {
             this.state.userObject.courses.includes(
               this.state.courseInfo.title
             ) ? (
-              <button>s</button>
+              <Link
+                to={"/course/videos/" + this.state.courseInfo._id}
+                className="btn text-center product-button"
+              >
+                <button className="text-center">Watch Course</button>
+              </Link>
             ) : (
               <Link to={"/checkout/" + this.state.courseInfo._id}>
                 <button className="btn product-button">Buy Now</button>

@@ -41,7 +41,7 @@ export default class Courses extends Component {
           ) : (
             <></>
           )}
-          <div className="course-list grid md:grid-cols-3 sm:grid-cols-1">
+          <div className="course-list grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1">
             {this.state.courses.length > 0 ? (
               this.state.courses.map((course) => {
                 if (this.counter < 3) {

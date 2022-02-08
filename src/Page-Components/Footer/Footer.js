@@ -35,9 +35,14 @@ function Footer() {
       </div>
       <p className="mt-2">Home Courses Your Courses</p>
       {admin ? (
-        <Link to={"/addContent/addCourses"}>
-          <button className="btn mt-5">Add Course</button>
-        </Link>
+        <div>
+          <Link to={"/addContent/addCourses"}>
+            <button className="btn mt-5">Add Course</button>
+          </Link>
+          <Link to={"/addContent/addVideos"}>
+            <button className="btn mt-5 ml-5">Add Video</button>
+          </Link>
+        </div>
       ) : (
         <></>
       )}

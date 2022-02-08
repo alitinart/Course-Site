@@ -7,9 +7,11 @@ import Auth from "./Auth/Auth";
 import Checkout from "./Checkout/Checkout";
 import CourseInfo from "./Courses/CourseInfo/CourseInfo";
 import CoursesPage from "./Courses/CoursesPage/CoursesPage";
+import CourseVideoRenderer from "./Courses/CourseVideos/CourseVideosRenderer";
 import Home from "./Home/Home";
 import Footer from "./Page-Components/Footer/Footer";
 import Header from "./Page-Components/Header/Header";
+import Video from "./Video/Video";
 
 function App() {
   let user = localStorage.getItem("currentUser");
@@ -42,6 +44,14 @@ function App() {
           <Route path="/auth/:type" element={<Auth />}></Route>
           <Route path="/account" element={<Account />}></Route>
           <Route path="/checkout/:id" element={<Checkout />}></Route>
+          <Route
+            path="/course/videos/:id"
+            element={<CourseVideoRenderer />}
+          ></Route>
+          <Route
+            path="/course/videos/:id/:videoIndex"
+            element={<Video />}
+          ></Route>
           <Route path="*" element={<Home />}></Route>
         </Routes>
         <Footer />

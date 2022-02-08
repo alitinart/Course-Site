@@ -62,6 +62,7 @@ export default class CheckoutContent extends Component {
     })
       .then((res) => {
         localStorage.setItem("currentUser", res.data);
+        window.location.href = "/";
       })
       .catch((err) => console.log(err));
   };

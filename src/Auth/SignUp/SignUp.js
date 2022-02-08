@@ -72,7 +72,7 @@ export default class SignUp extends Component {
           <p className="mb-2 text-center">
             Don't have a account ?{" "}
             <Link to={"/auth/login"}>
-              <span className="text-blue-500 cursor-pointer">Sign Up</span>
+              <span className="text-blue-500 cursor-pointer">Log In</span>
             </Link>
           </p>
           <button className="btn submit-button-form" type="submit">

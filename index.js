@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-require("dotenv").config();
+require("dotenv");
 
 const mongoose = require("mongoose");
 const db = require("./db/db");
@@ -412,6 +412,6 @@ app.get("/token", (req, res) => {
   res.send(process.env.STRIPE_TOKEN);
 });
 
-app.listen(process.env.PORT || 3000, () => {
-  console.log("App listening on port 3000");
+app.listen(8000, () => {
+  console.log("App listening on port 8000");
 });

@@ -62,7 +62,7 @@ Don't forget to give the project a star! Thanks again!
 <!-- CONTACT -->
 ## Contact
 
-Your Name - [@your_twitter](https://twitter.com/alitinart) - alitinart@gmail.com
+Nart Aliti - [@alitinart](https://twitter.com/alitinart) - alitinart@gmail.com
 
 Project Link: [https://github.com/alitinart/course-site](https://github.com/alitinart/course-site)
 
